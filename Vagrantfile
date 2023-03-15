@@ -2,13 +2,9 @@
 # vim: set ft=ruby :
 
 MACHINES = {
-  :host1 => {
+  :nginx => {
         :box_name => "centos/7",
-        :ip_addr => '192.168.11.150'
-  },
-  :host2 => {
-        :box_name => "centos/7",
-        :ip_addr => '192.168.11.151'
+        :ip_addr => '192.168.56.150'
   }
 }
 
@@ -21,15 +17,10 @@ Vagrant.configure("2") do |config|
           box.vm.box = boxconfig[:box_name]
           box.vm.host_name = boxname.to_s
 
-          #box.vm.network "forwarded_port", guest: 3260, host: 3260+offset
-
           box.vm.network "private_network", ip: boxconfig[:ip_addr]
 
           box.vm.provider :virtualbox do |vb|
             vb.customize ["modifyvm", :id, "--memory", "200"]
-            # Подключаем дополнительные диски
-            #vb.customize ['createhd', '--filename', second_disk, '--format', 'VDI', '--size', 5 * 1024]
-            #vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', second_disk]
           end
           
           box.vm.provision "shell", inline: <<-SHELL
@@ -37,13 +28,7 @@ Vagrant.configure("2") do |config|
             sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
             systemctl restart sshd
           SHELL
-=begin 
-          box.vm.provision "ansible" do |ansible|
-            ansible.verbose = "vv"
-            ansible.playbook = "provision/playbook.yml"
-            ansible.become = "true"
-          end
-=end
+
       end
   end
 end
