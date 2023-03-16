@@ -1,0 +1,30 @@
+---
+- name: Installation Web server Debian/Ubuntu
+  hosts: web
+  become: yes
+  tasks:
+  - name: PING
+    ping:
+  # tasks file for nginx
+  ## Установка nginx для Centos
+  - name: Install epel-release
+    yum:
+        name: epel-release
+        state: present
+    when:
+        ansible_os_family == "RedHat" 
+  ## Установка nginx для Centos
+  - name: Install nginx for Centos
+    yum:
+        name: nginx
+        state: latest
+    when:
+        ansible_os_family == "RedHat"
+  ## Установка nginx для Debian/Ubuntu
+  - name: Install nginx Debian/Ubuntu
+    apt:
+        update_cache: yes
+        name: nginx
+        state: latest
+    when:
+      ansible_os_family == "Debian"
