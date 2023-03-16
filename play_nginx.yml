@@ -1,5 +1,5 @@
 ---
-- name: Installation Web server Debian/Ubuntu
+- name: Installation Web server Debian/Ubuntu/Centos
   hosts: web
   become: yes
   tasks:
