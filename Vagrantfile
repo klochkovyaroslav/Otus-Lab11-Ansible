@@ -1,34 +1,45 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
-MACHINES = {
-  :nginx => {
-        :box_name => "centos/7",
-        :ip_addr => '192.168.56.150'
-  }
-}
+Vagrant.configure(2) do |config|
+  # Centos7
+    config.vm.define "server1-centos" do |cnt|
+    # имя виртуальной машины
+    cnt.vm.box = 'centos/7' 
+    cnt.vm.provider "virtualbox" do |vb|
+      vb.name = "server1-centos"
+    end
+    # hostname виртуальной машины
+    server.vm.hostname = "server1-centos"
+    # настройки сети
+    server.vm.network "private_network", ip: "192.168.56.150"
+    server.vm.synced_folder ".", "/vagrant",  
+          type: "rsync",
+          rsync_auto: "true",
+          rsync_exclude: [".git/",".vagrant/",".gitignore","Vagrantfile"]
+          #server.vm.provision "shell", path: "provision/prepare-host.sh"
+    end
 
-Vagrant.configure("2") do |config|
+  # Ubuntu
+    config.vm.define "server2-ubuntu" do |ubnt|
+    # имя виртуальной машины
+    ubnt.vm.box = 'ubuntu/trusty64' 
+    ubnt.vm.provider "virtualbox" do |vbc|
+      vbc.name = "server2-ubuntu"
+    end
+    # hostname виртуальной машины
+    client.vm.hostname = "server2-ubuntu"
+    # настройки сети
+    client.vm.network "private_network", ip: "192.168.56.151"
+    client.vm.synced_folder ".", "/vagrant",  
+          type: "rsync",
+          rsync_auto: "true",
+          rsync_exclude: [".git/",".vagrant/",".gitignore","Vagrantfile"]
+          #client.vm.provision "shell", path: "provision/prepare-host.sh"
+# ssh-pub add in server
+  config.vm.provision "shell", inline: <<-SHELL
+  cat /vagrant/provision/vagrant-key.pub >> /home/vagrant/.ssh/authorized_keys
+  SHELL
 
-  MACHINES.each do |boxname, boxconfig|
-
-      config.vm.define boxname do |box|
-
-          box.vm.box = boxconfig[:box_name]
-          box.vm.host_name = boxname.to_s
-
-          box.vm.network "private_network", ip: boxconfig[:ip_addr]
-
-          box.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "200"]
-          end
-          
-          box.vm.provision "shell", inline: <<-SHELL
-            mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
-            sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
-            systemctl restart sshd
-          SHELL
-
-      end
-  end
+    end
 end
