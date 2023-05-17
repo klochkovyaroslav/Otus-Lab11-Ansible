@@ -12,12 +12,12 @@ Vagrant.configure(2) do |config|
     # имя виртуальной машины в системе
     cntvm.hostname = "server1-centos"
     # настройки сети
-    cntvm.network "private_network", ip: "192.168.56.150"
-    cntvm.synced_folder ".", "/vagrant",  
+    cnt.vm.network "private_network", ip: "192.168.56.150"
+    cnt.vm.synced_folder ".", "/vagrant",  
           type: "rsync",
           rsync_auto: "true",
           rsync_exclude: [".git/",".vagrant/",".gitignore","Vagrantfile"]
-          #cntvm.provision "shell", path: "provision/prepare-host.sh"
+          #cnt.vm.provision "shell", path: "provision/prepare-host.sh"
     end
 
   # Ubuntu
