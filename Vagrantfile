@@ -6,16 +6,13 @@ Vagrant.configure(2) do |config|
     config.vm.define "server1-centos" do |cnt|
         cnt.vm.box = 'centos/7' 
     cnt.vm.provider "virtualbox" do |vb|
-      # имя виртуальной машины в гепервизоре
-      vb.name = "server1-centos"
-      # RAM
-      vb.memory = "1024"
+        vb.name = "server1-centos" # имя виртуальной машины в гепервизоре
+        vb.memory = "1024" # RAM
     end
-    # имя виртуальной машины в системе
-    cnt.vm.hostname = "server1-centos"
-    # настройки сети
-    cnt.vm.network "private_network", ip: "192.168.56.150"
-    cnt.vm.synced_folder ".", "/vagrant",  
+    
+    cnt.vm.hostname = "server1-centos" # имя виртуальной машины в системе
+    cnt.vm.network "private_network", ip: "192.168.56.150" # настройки сети
+    cnt.vm.synced_folder ".", "/vagrant",  # Каталог с хоста синхронизирован в ВМ в /vagrant
           type: "rsync",
           rsync_auto: "true",
           rsync_exclude: [".git/",".vagrant/",".gitignore","Vagrantfile"]
