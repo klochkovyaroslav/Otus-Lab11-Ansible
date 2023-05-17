@@ -4,28 +4,31 @@
 Vagrant.configure(2) do |config|
   # Centos7
     config.vm.define "server1-centos" do |cnt|
-    # имя виртуальной машины в гепервизоре
-    cnt.vm.box = 'centos/7' 
+        cnt.vm.box = 'centos/7' 
     cnt.vm.provider "virtualbox" do |vb|
+      # имя виртуальной машины в гепервизоре
       vb.name = "server1-centos"
+      # RAM
+      vb.memory = "1024"
     end
     # имя виртуальной машины в системе
-    cntvm.hostname = "server1-centos"
+    cnt.vm.hostname = "server1-centos"
     # настройки сети
     cnt.vm.network "private_network", ip: "192.168.56.150"
     cnt.vm.synced_folder ".", "/vagrant",  
           type: "rsync",
           rsync_auto: "true",
           rsync_exclude: [".git/",".vagrant/",".gitignore","Vagrantfile"]
-          #cnt.vm.provision "shell", path: "provision/prepare-host.sh"
     end
 
   # Ubuntu
     config.vm.define "server2-ubuntu" do |ubnt|
-    # имя виртуальной машины в гепервизоре
-    ubnt.vm.box = 'ubuntu/trusty64' 
+        ubnt.vm.box = 'ubuntu/trusty64' 
     ubnt.vm.provider "virtualbox" do |vbc|
+      # имя виртуальной машины в гепервизоре
       vbc.name = "server2-ubuntu"
+      # RAM
+      vbc.memory = "1024"
     end
     # имя виртуальной машины в системе
     ubnt.vm.hostname = "server2-ubuntu"
@@ -37,7 +40,7 @@ Vagrant.configure(2) do |config|
           rsync_exclude: [".git/",".vagrant/",".gitignore","Vagrantfile"]
           # Публичный ключ для ssh
   config.vm.provision "shell", inline: <<-SHELL
-  cat /vagrant/provision/vagrant-key.pub >> /home/vagrant/.ssh/authorized_keys
+  cat /vagrant/vagrant-key.pub >> /home/vagrant/.ssh/authorized_keys
   SHELL
 
     end
