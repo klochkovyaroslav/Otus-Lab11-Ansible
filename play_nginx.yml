@@ -1,12 +1,12 @@
 ---
-- name: Installation Web server Debian/Ubuntu
+- name: Installation Web server Debian/Ubuntu/Centos
   hosts: web
   become: yes
   tasks:
   - name: PING
     ping:
   # tasks file for nginx
-  ## Установка nginx для Centos
+  ## Установка epel-release
   - name: Install epel-release
     yum:
         name: epel-release
