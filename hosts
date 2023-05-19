@@ -1,3 +1,9 @@
-[web]
-192.168.56.150 ansible_user=vagrant  ansible_private_key_file=/home/vagrant/.ssh/authorized_keys
-192.168.56.151 ansible_user=vagrant  ansible_private_key_file=/home/vagrant/.ssh/authorized_keys
+[rpm]
+Centos7 ansible_host=192.168.56.150
+[deb]
+
+Ubuntu  ansible_host=192.168.56.151
+
+[web:children]
+rpm
+deb

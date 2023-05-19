@@ -1,0 +1,4 @@
+---
+ansible_user : vagrant
+environment  : Lab_Ansible
+owner        : Klochkov
