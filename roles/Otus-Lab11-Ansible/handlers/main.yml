@@ -1,0 +1,9 @@
+---
+# handlers file for Otus-Lab11-Ansible
+- name: Restart nginx RedHat
+  service: name=nginx state=restarted
+  when: ansible_os_family == "RedHat"
+
+- name: Restart nginx Ubuntu
+  service: name=nginx state=restarted
+  when: ansible_os_family == "Debian"

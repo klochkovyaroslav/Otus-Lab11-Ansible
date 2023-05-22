@@ -1,0 +1,6 @@
+---
+# defaults file for Otus-Lab11-Ansible
+destin_file: /usr/share/nginx/html
+nginx_port: 8080
+virtual_domain: Otus-Lab11-Ansible
+nginx_conf: /etc/nginx

@@ -1,30 +1,7 @@
 ---
-- name: Installation Web server Debian/Ubuntu/Centos
+- name: Install Apache and Upload my web page
   hosts: web
   become: yes
-  tasks:
-  - name: PING
-    ping:
-  # tasks file for nginx
-  ## Установка epel-release
-  - name: Install epel-release
-    yum:
-        name: epel-release
-        state: present
-    when:
-        ansible_os_family == "RedHat" 
-  ## Установка nginx для Centos
-  - name: Install nginx for Centos
-    yum:
-        name: nginx
-        state: latest
-    when:
-        ansible_os_family == "RedHat"
-  ## Установка nginx для Debian/Ubuntu
-  - name: Install nginx Debian/Ubuntu
-    apt:
-        update_cache: yes
-        name: nginx
-        state: latest
-    when:
-      ansible_os_family == "Debian"
+
+  roles:
+    - { role: Otus-Lab11-Ansible, when : ansible_system == 'Linux'} 

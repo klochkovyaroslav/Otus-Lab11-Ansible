@@ -1,0 +1,46 @@
+---
+# tasks file for Otus-Lab11-Ansible
+- name: Check and Print Linux version
+  debug: var=ansible_os_family
+
+- name: Inclide vars
+  include_vars: "{{ ansible_os_family }}.yml"  
+######################### Блок для Centos ###########################################################
+- block: #Block for RedHat
+
+    - name: Add epel-release repo
+      yum: name=epel-release state=latest
+
+    - name: Install nano for RPM
+      yum: name=nano state=latest
+
+    - name: Install Nginx web server for RPM
+      yum: name=nginx state=latest
+
+    - name: Start web server and Enable on boot for RedHat
+      service: name=nginx state=started enabled=yes
+
+  when: ansible_os_family == "RedHat" # Условие для срабатывания всего блока. 
+
+######################### Блок для Ubuntu ###########################################################
+
+- block: #Block for Ubuntu
+
+    - name: Install Nginx web server for DEB
+      apt: name=nginx state=latest
+
+    - name: Start web server and Enable on boot for Ubuntu
+      service: name=nginx state=started enabled=yes
+
+  when: ansible_os_family == "Debian"
+
+######################### Конец описания Блоков ##########################################################
+
+- name: Generate index.html on Servers
+  template: src=index.j2 dest={{ destin_file }}/index.html mode=0555
+
+- name: Generate nginx.conf on Servers
+  template: src=nginx.conf.j2 dest={{ nginx_conf }}/nginx.conf mode=0555  
+  notify: # Вызов handlers
+    - Restart nginx RedHat
+    - Restart nginx Ubuntu
