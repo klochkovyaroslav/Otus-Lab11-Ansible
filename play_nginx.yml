@@ -1,5 +1,5 @@
 ---
-- name: Install Apache and Upload my web page
+- name: Install Nginx and Generate my web page
   hosts: web
   become: yes
 
